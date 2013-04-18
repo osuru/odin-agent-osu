@@ -6,11 +6,20 @@ src/odinagent{.cc,.hh}
 These are the Click OdinAgent element files. They've only been
 tested in userspace mode so far. To build:
 
-1. Add these files to <click>/elements/local/
+0. Get click router src
 
+git clone https://github.com/osuru/kohler/click.git
+
+
+1. Add these files to <clickdir>/elements/local/
+
+git clone https://github.com/osuru/odin-agent-osu.git
+cd odin-agent-osu
 cp src/* <clickdir>/elements/local 
 
 2. Build Click with the --enable-local, --enable-wifi --enable-userlevel flag.
+
+cd <clickdir>
 
 ./configure --enable-local --enable-wifi --enable-userlevel
 make
@@ -45,3 +54,37 @@ agent-click-file-gen.py
 
 Click file generator for the agent. Configure and use this script
 to generate the appropriate Odin agent click file.
+
+Usage:
+
+./agent-click-file-gen.py <AP_CHANNEL> <MAX QUEUE> <HW_MAC_AP> <ODIN_MASTER_IP> <ODIN_MASTER_PORT> > config.click
+
+In the result we have file <config.click>. Attention:inside the script there is some staticaly ARP IP_MAC pair - CHANGE IT. 
+For run config, use
+
+./clickclick config.click &
+
+Waring: this don`t work whithout debugfs!. Check string
+
+none /sys/kernel/debug debugfs rw 0 0
+
+in /etc/mtab. If there is, do nothing else to mount this use 
+
+mount -t debugfs debugfs /sys/kernel/debug
+
+or write line to /etc/fstab
+
+none  /sys/kernel/debug debugfs defaults 0 0
+
+and reboot.
+
+
+PS
+
+
+to use click with odin, wifi MUST be in monitor mode and it monitor interface MUST named mon0. 
+
+For example, we use ath1 network adapter
+
+wlanconfig ath1 destroy
+wlanconfig  ath1 create wlandev wifi0 wlanmode monitor

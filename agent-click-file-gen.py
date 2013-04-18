@@ -1,6 +1,6 @@
+#!/usr/bin/python
 
 
-aaa
 import sys
 
 if (len(sys.argv) != 6):
@@ -18,7 +18,7 @@ ODIN_MASTER_PORT = sys.argv[5]
 DEFAULT_CLIENT_MAC = "e8-39-df-4c-7c-ee"
 
 print '''
-odinagent::OdinAgent(%s, RT rates, CHANNEL %s, DEFAULT_GW 172.17.2.53)
+odinagent::OdinAgent(%s, RT rates, CHANNEL %s, DEFAULT_GW 172.17.2.53,DEBUGFS bssid_extra)
 TimedSource(2, "ping\n")->  odinsocket::Socket(UDP, %s, %s, CLIENT true)
 ''' % (HW_ADDR, AP_CHANNEL, ODIN_MASTER_IP, ODIN_MASTER_PORT)
 

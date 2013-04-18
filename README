@@ -8,8 +8,37 @@ tested in userspace mode so far. To build:
 
 1. Add these files to <click>/elements/local/
 
-2. Build Click with the --enable-local and --enable-userspace flag.
+cp src/* <clickdir>/elements/local 
 
+2. Build Click with the --enable-local, --enable-wifi --enable-userlevel flag.
+
+./configure --enable-local --enable-wifi --enable-userlevel
+make
+
+for multiprocessor user make -j2 or make -j3, where 2 or 3 = count of cores - 1
+
+In result, file will be about 23 Mb - it`s big for  small routers memory. We need cut unused modules
+First we need create any config
+
+./agent-click-file-gen.py 1 1  00:00:00:00:00:00 1.1.1.1 2 > <clickdir>/userlevel/agent.click
+
+this is examle params values, it use only for cut unused modules.
+
+Now we create elementmap.xml
+
+make install-local
+
+cp elementmap.xml ./tools/click-mkmindriver/
+cp ./userlevel/click ./tools/click-mkmindriver/
+cd ./tools/click-mkmindriver/ 
+./click-mkmindriver -f ../../userlevel/agent.click -p click -a -u -d ../../userlevel
+
+It create new makefile for minimal set of modules
+
+cd ../../userlevel
+make MINDRIVER=click
+
+And we see file clickclick with size 6Mb. It contain only needed modules.
 
 agent-click-file-gen.py
 -----------------------
